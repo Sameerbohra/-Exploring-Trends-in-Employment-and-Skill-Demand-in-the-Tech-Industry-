@@ -1,0 +1,25 @@
+import plotly.express as px
+
+# Step 5: Interactive Bar Chart for Top Locations
+fig_location = px.bar(
+    location_counts, 
+    x=location_counts.index, 
+    y=location_counts.values, 
+    title="Top Locations for Data Analyst Jobs", 
+    labels={"x": "Locations", "y": "Job Count"}
+)
+interactive_location_chart = "/mnt/data/interactive_locations.html"
+fig_location.write_html(interactive_location_chart)
+
+# Step 6: Interactive Salary Distribution
+fig_salary = px.histogram(
+    x=salaries, 
+    nbins=10, 
+    title="Salary Distribution for Data Analysts", 
+    labels={"x": "Salary ($)", "y": "Frequency"},
+    color_discrete_sequence=["green"]
+)
+interactive_salary_chart = "/mnt/data/interactive_salary.html"
+fig_salary.write_html(interactive_salary_chart)
+
+interactive_location_chart, interactive_salary_chart

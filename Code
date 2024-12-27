@@ -1,0 +1,73 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+import plotly.express as px
+
+# Load the dataset (replace 'your_dataset.csv' with the file path to your dataset)
+data = pd.read_csv('job_postings.csv')
+
+# Step 1: Data Cleaning
+# Drop duplicates
+data.drop_duplicates(inplace=True)
+
+# Handle missing values
+data.fillna({'Location': 'Unknown', 'Salary': 'Not Specified', 'Skills': 'Not Specified'}, inplace=True)
+
+# Step 2: Exploratory Data Analysis (EDA)
+# Top Locations for Data Analyst Jobs
+location_counts = data['Location'].value_counts().head(10)
+
+# Skills Word Cloud
+skills_text = ' '.join(data['Skills'].dropna())
+skill_wordcloud = WordCloud(background_color='white', width=800, height=400).generate(skills_text)
+
+# Salary Distribution
+salary_data = data[data['Salary'] != 'Not Specified']
+salary_data['Salary'] = salary_data['Salary'].str.extract('(\d+)').astype(float)
+
+# Step 3: Data Visualization
+plt.figure(figsize=(10, 6))
+plt.bar(location_counts.index, location_counts.values, color='skyblue')
+plt.title('Top 10 Locations for Data Analyst Jobs')
+plt.xlabel('Locations')
+plt.ylabel('Job Count')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('top_locations.png')
+
+plt.figure(figsize=(10, 6))
+plt.imshow(skill_wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.title('Skills Word Cloud')
+plt.savefig('skills_wordcloud.png')
+
+plt.figure(figsize=(10, 6))
+sns.histplot(salary_data['Salary'], kde=True, color='green', bins=20)
+plt.title('Salary Distribution for Data Analysts')
+plt.xlabel('Salary')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.savefig('salary_distribution.png')
+
+# Interactive Visualizations using Plotly
+fig = px.bar(location_counts, x=location_counts.index, y=location_counts.values, title='Top Locations for Data Analyst Jobs', labels={'x': 'Location', 'y': 'Job Count'})
+fig.write_html('interactive_locations.html')
+
+fig = px.histogram(salary_data, x='Salary', title='Salary Distribution for Data Analysts', labels={'x': 'Salary', 'y': 'Frequency'}, nbins=20)
+fig.write_html('interactive_salary.html')
+
+# Insights Summary
+insights = """
+Insights from the Analysis:
+1. Most Data Analyst job postings are in major tech hubs like City_A, City_B, and City_C.
+2. The most in-demand skills include Python, SQL, Excel, and Tableau, as highlighted in the word cloud.
+3. Entry-level salaries range from $X to $Y, with a significant number of jobs in the $Z range.
+4. High-paying roles are more common in specific regions.
+"""
+
+with open('project_insights.txt', 'w') as f:
+    f.write(insights)
+
+print("Project Completed. Charts and insights saved.")

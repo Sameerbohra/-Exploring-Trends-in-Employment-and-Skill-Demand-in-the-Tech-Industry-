@@ -1,0 +1,50 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+
+# Load the dataset
+job_postings = pd.read_csv('/mnt/data/job_postings.csv')
+
+# Step 1: Data Cleaning (not required here as data is clean already)
+
+# Step 2: Top Locations for Data Analyst Jobs
+location_counts = job_postings['Location'].value_counts()
+
+# Plotting Top Locations
+plt.figure(figsize=(10, 6))
+sns.barplot(x=location_counts.index, y=location_counts.values, palette="viridis")
+plt.title('Top Locations for Data Analyst Jobs', fontsize=14)
+plt.xlabel('Locations', fontsize=12)
+plt.ylabel('Job Count', fontsize=12)
+plt.xticks(rotation=45)
+plt.tight_layout()
+top_locations_chart = "/mnt/data/top_locations.png"
+plt.savefig(top_locations_chart)
+plt.close()
+
+# Step 3: Skills Word Cloud
+skills_text = ' '.join(job_postings['Skills'])
+skill_wordcloud = WordCloud(background_color='white', width=800, height=400).generate(skills_text)
+
+plt.figure(figsize=(10, 6))
+plt.imshow(skill_wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.title('Skills Word Cloud', fontsize=14)
+skills_wordcloud_chart = "/mnt/data/skills_wordcloud.png"
+plt.savefig(skills_wordcloud_chart)
+plt.close()
+
+# Step 4: Salary Distribution
+salaries = job_postings['Salary'].str.replace('[\\$,]', '', regex=True).astype(float)
+
+plt.figure(figsize=(10, 6))
+sns.histplot(salaries, kde=True, color="green", bins=10)
+plt.title('Salary Distribution for Data Analysts', fontsize=14)
+plt.xlabel('Salary ($)', fontsize=12)
+plt.ylabel('Frequency', fontsize=12)
+plt.tight_layout()
+salary_distribution_chart = "/mnt/data/salary_distribution.png"
+plt.savefig(salary_distribution_chart)
+plt.close()
+
+top_locations_chart, skills_wordcloud_chart, salary_distribution_chart

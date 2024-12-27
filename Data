@@ -1,0 +1,31 @@
+import pandas as pd
+
+# Creating a synthetic dataset for job postings
+data = {
+    "Job Title": [
+        "Data Analyst", "Junior Data Analyst", "Senior Data Analyst", "Business Analyst",
+        "Data Scientist", "Data Analyst", "Data Engineer", "Data Analyst", "Data Visualization Specialist", "Data Analyst"
+    ],
+    "Location": [
+        "New York, NY", "San Francisco, CA", "Austin, TX", "Seattle, WA",
+        "Boston, MA", "New York, NY", "Chicago, IL", "San Francisco, CA", "Los Angeles, CA", "Seattle, WA"
+    ],
+    "Salary": [
+        "$70,000", "$75,000", "$95,000", "$80,000",
+        "$100,000", "$72,000", "$85,000", "$77,000", "$78,000", "$83,000"
+    ],
+    "Skills": [
+        "Python, SQL, Tableau", "Excel, SQL, Python", "Python, R, SQL", "SQL, Power BI, Communication",
+        "Machine Learning, Python, SQL", "Excel, Python, Data Visualization", "SQL, Data Warehousing, ETL", 
+        "Python, Tableau, SQL", "Data Visualization, Tableau, Excel", "Python, R, Communication"
+    ]
+}
+
+# Creating a DataFrame
+job_postings = pd.DataFrame(data)
+
+# Saving the dataset to a CSV file
+file_path = "/mnt/data/job_postings.csv"
+job_postings.to_csv(file_path, index=False)
+
+file_path
